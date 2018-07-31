@@ -150,6 +150,10 @@ public class CdsObjectFactory {
      * @return
      */
     public static IVLTS getIVLTS(String lowValue, String highValue) {
+        if (isEmpty(lowValue) && isEmpty(highValue)) {
+            return null;
+        }
+
         IVLTS ivlts = new IVLTS();
         if (lowValue != null) {
             ivlts.setLow(lowValue);
@@ -385,8 +389,8 @@ public class CdsObjectFactory {
      * @param displayName
      * @param codeSystem
      * @param codeSystemName
-     * @param administrationEventLowTime
-     * @param administrationEventHighTime
+     * @param lowTime
+     * @param highTime
      * @return
      */
     public static SubstanceAdministrationEvent getSubstanceAdministrationEvent(
@@ -394,8 +398,8 @@ public class CdsObjectFactory {
             String displayName,
             String codeSystem,
             String codeSystemName,
-            String administrationEventLowTime,
-            String administrationEventHighTime) {
+            String lowTime,
+            String highTime) {
         SubstanceAdministrationEvent substanceAdministrationEvent = getSubstanceAdministrationEvent();
 
         if (code != null && codeSystem != null) {
@@ -404,12 +408,16 @@ public class CdsObjectFactory {
             substanceAdministrationEvent.setSubstance(substance);
         }
 
-        IVLTS ivlts = new IVLTS();
-        ivlts.setHigh(administrationEventHighTime);
-        ivlts.setLow(administrationEventLowTime);
-
-        substanceAdministrationEvent.setAdministrationTimeInterval(ivlts);
-
+        if (!CdsObjectFactory.isEmpty(lowTime) || !CdsObjectFactory.isEmpty(highTime)) {
+            IVLTS ivlts = new IVLTS();
+            if (!CdsObjectFactory.isEmpty(highTime)) {
+                ivlts.setHigh(highTime);
+            }
+            if (!CdsObjectFactory.isEmpty(lowTime)) {
+                ivlts.setLow(lowTime);
+            }
+            substanceAdministrationEvent.setAdministrationTimeInterval(ivlts);
+        }
         return substanceAdministrationEvent;
     }
 
@@ -420,8 +428,8 @@ public class CdsObjectFactory {
      * @param displayName
      * @param codeSystem
      * @param codeSystemName
-     * @param administrationEventLowTime
-     * @param administrationEventHighTime
+     * @param lowTime
+     * @param highTime
      * @return
      */
     public static SupplyEvent getSupplyEvent(
@@ -429,18 +437,22 @@ public class CdsObjectFactory {
             String displayName,
             String codeSystem,
             String codeSystemName,
-            String administrationEventLowTime,
-            String administrationEventHighTime) {
+            String lowTime,
+            String highTime) {
         SupplyEvent supplyEvent = getSupplyEvent();
 
         supplyEvent.setSupplyCode(getCD(code, codeSystem, displayName, codeSystemName));
 
-        IVLTS ivlts = new IVLTS();
-        ivlts.setHigh(administrationEventHighTime);
-        ivlts.setLow(administrationEventLowTime);
-
-        supplyEvent.setSupplyTime(ivlts);
-
+        if (!CdsObjectFactory.isEmpty(lowTime) || !CdsObjectFactory.isEmpty(highTime)) {
+            IVLTS ivlts = new IVLTS();
+            if (!CdsObjectFactory.isEmpty(highTime)) {
+                ivlts.setHigh(highTime);
+            }
+            if (!CdsObjectFactory.isEmpty(lowTime)) {
+                ivlts.setLow(lowTime);
+            }
+            supplyEvent.setSupplyTime(ivlts);
+        }
         return supplyEvent;
     }
 
@@ -454,12 +466,14 @@ public class CdsObjectFactory {
 
         procedureEvent.setProcedureCode(getCD(code, codeSystem, displayName, codeSystemName));
 
-        IVLTS ivlts = new IVLTS();
-        ivlts.setHigh(eventDate);
-        ivlts.setLow(eventDate);
-
-        procedureEvent.setProcedureTime(ivlts);
-
+        if (!CdsObjectFactory.isEmpty(eventDate)) {
+            IVLTS ivlts = new IVLTS();
+            if (!CdsObjectFactory.isEmpty(eventDate)) {
+                ivlts.setHigh(eventDate);
+                ivlts.setLow(eventDate);
+            }
+            procedureEvent.setProcedureTime(ivlts);
+        }
         return procedureEvent;
     }
 
@@ -472,8 +486,8 @@ public class CdsObjectFactory {
             String procedureEventStatusCodeDisplayName,
             String procedureEventStatusCodeSystem,
             String procedureEventStatusCodeSystemName,
-            String procedureEventLowTime,
-            String procedureEventHighTime,
+            String lowTime,
+            String highTime,
             String idRoot,
             String idExtension) {
 
@@ -497,12 +511,16 @@ public class CdsObjectFactory {
         relatedClinicalStatement.setObservationResult(observationResult);
         procedureEvent.getRelatedClinicalStatement().add(relatedClinicalStatement);
 
-        IVLTS ivlts = new IVLTS();
-        ivlts.setHigh(procedureEventHighTime);
-        ivlts.setLow(procedureEventLowTime);
-
-        procedureEvent.setProcedureTime(ivlts);
-
+        if (!CdsObjectFactory.isEmpty(lowTime) || !CdsObjectFactory.isEmpty(highTime)) {
+            IVLTS ivlts = new IVLTS();
+            if (!CdsObjectFactory.isEmpty(highTime)) {
+                ivlts.setHigh(highTime);
+            }
+            if (!CdsObjectFactory.isEmpty(lowTime)) {
+                ivlts.setLow(lowTime);
+            }
+            procedureEvent.setProcedureTime(ivlts);
+        }
         return procedureEvent;
     }
 
@@ -515,20 +533,24 @@ public class CdsObjectFactory {
             String goalStatusCodeDisplayName,
             String goalStatusCodeCodeSystem,
             String goalStatusCodeCodeSystemName,
-            String goalLowTime,
-            String goalHighTime) {
+            String lowTime,
+            String highTime) {
 
         Goal goal = getGoal();
 
         goal.setGoalFocus(getCD(goalFocusCode, goalFocusCodeSystem, goalFocusDisplayName, goalFocusCodeSystemName));
         goal.setGoalStatus(getCD(goalStatusCode, goalStatusCodeCodeSystem, goalStatusCodeDisplayName, goalStatusCodeCodeSystemName));
 
-        IVLTS ivlts = new IVLTS();
-        ivlts.setHigh(goalHighTime);
-        ivlts.setLow(goalLowTime);
-
-        goal.setGoalObserverEventTime(ivlts);
-
+        if (!CdsObjectFactory.isEmpty(lowTime) || !CdsObjectFactory.isEmpty(highTime)) {
+            IVLTS ivlts = new IVLTS();
+            if (!CdsObjectFactory.isEmpty(highTime)) {
+                ivlts.setHigh(highTime);
+            }
+            if (!CdsObjectFactory.isEmpty(lowTime)) {
+                ivlts.setLow(lowTime);
+            }
+            goal.setGoalObserverEventTime(ivlts);
+        }
         return goal;
     }
 
@@ -541,19 +563,23 @@ public class CdsObjectFactory {
             String adverseEventStatusDisplayName,
             String adverseEventStatusCodeSystem,
             String adverseEventStatusCodeSystemName,
-            String adverseEventLowTime,
-            String adverseEventHighTime) throws CdsException {
+            String lowTime,
+            String highTime) throws CdsException {
         AdverseEvent adverseEvent = getAdverseEvent();
 
         adverseEvent.setAdverseEventCode(getCD(adverseEventCode, adverseEventCodeCodeSystem, adverseEventCodeDisplayName, adverseEventCodeCodeSystemName));
         adverseEvent.setAdverseEventStatus(getCD(adverseEventStatus, adverseEventStatusCodeSystem, adverseEventStatusDisplayName, adverseEventStatusCodeSystemName));
 
-        IVLTS ivlts = new IVLTS();
-        ivlts.setHigh(adverseEventHighTime);
-        ivlts.setLow(adverseEventLowTime);
-
-        adverseEvent.setAdverseEventTime(ivlts);
-
+        if (!CdsObjectFactory.isEmpty(lowTime) || !CdsObjectFactory.isEmpty(highTime)) {
+            IVLTS ivlts = new IVLTS();
+            if (!CdsObjectFactory.isEmpty(highTime)) {
+                ivlts.setHigh(highTime);
+            }
+            if (!CdsObjectFactory.isEmpty(lowTime)) {
+                ivlts.setLow(lowTime);
+            }
+            adverseEvent.setAdverseEventTime(ivlts);
+        }
         return adverseEvent;
     }
 
@@ -566,20 +592,24 @@ public class CdsObjectFactory {
             String statusCodeDisplayName,
             String statusCodeSystem,
             String statusCodeSystemName,
-            String problemLowTime,
-            String problemHighTime) throws CdsException {
+            String lowTime,
+            String highTime) throws CdsException {
 
         Problem problem = getProblem();
 
         problem.setProblemCode(getCD(problemCode, problemCodeSystem, problemCodeDisplayName, problemCodeSystemName));
         problem.setProblemStatus(getCD(statusCode, statusCodeSystem, statusCodeDisplayName, statusCodeSystemName));
 
-        IVLTS ivlts = new IVLTS();
-        ivlts.setHigh(problemHighTime);
-        ivlts.setLow(problemLowTime);
-
-        problem.setProblemEffectiveTime(ivlts);
-
+        if (!CdsObjectFactory.isEmpty(lowTime) || !CdsObjectFactory.isEmpty(highTime)) {
+            IVLTS ivlts = new IVLTS();
+            if (!CdsObjectFactory.isEmpty(highTime)) {
+                ivlts.setHigh(highTime);
+            }
+            if (!CdsObjectFactory.isEmpty(lowTime)) {
+                ivlts.setLow(lowTime);
+            }
+            problem.setProblemEffectiveTime(ivlts);
+        }
         return problem;
     }
 
@@ -610,12 +640,14 @@ public class CdsObjectFactory {
 
         problem.getRelatedClinicalStatement().add(relatedClinicalStatement);
 
-        IVLTS ivlts = new IVLTS();
-        ivlts.setHigh(eventDate);
-        ivlts.setLow(eventDate);
-
-        problem.setProblemEffectiveTime(ivlts);
-
+        if (!CdsObjectFactory.isEmpty(eventDate)) {
+            IVLTS ivlts = new IVLTS();
+            if (!CdsObjectFactory.isEmpty(eventDate)) {
+                ivlts.setHigh(eventDate);
+                ivlts.setLow(eventDate);
+            }
+            problem.setProblemEffectiveTime(ivlts);
+        }
         return problem;
     }
 
@@ -624,18 +656,22 @@ public class CdsObjectFactory {
             String encounterEventCodeDisplayName,
             String encounterEventCodeCodeSystem,
             String encounterEventCodeCodeSystemName,
-            String encounterEventLowTime,
-            String encounterEventHighTime) throws CdsException {
+            String lowTime,
+            String highTime) throws CdsException {
 
         EncounterEvent encounterEvent = getEncounterEvent();
         encounterEvent.setEncounterType(getCD(encounterEventCode, encounterEventCodeCodeSystem, encounterEventCodeDisplayName, encounterEventCodeCodeSystemName));
 
-        IVLTS ivlts = new IVLTS();
-        ivlts.setHigh(encounterEventHighTime);
-        ivlts.setLow(encounterEventLowTime);
-
-        encounterEvent.setEncounterEventTime(ivlts);
-
+        if (!CdsObjectFactory.isEmpty(lowTime) || !CdsObjectFactory.isEmpty(highTime)) {
+            IVLTS ivlts = new IVLTS();
+            if (!CdsObjectFactory.isEmpty(highTime)) {
+                ivlts.setHigh(highTime);
+            }
+            if (!CdsObjectFactory.isEmpty(lowTime)) {
+                ivlts.setLow(lowTime);
+            }
+            encounterEvent.setEncounterEventTime(ivlts);
+        }
         return encounterEvent;
     }
 
@@ -931,6 +967,16 @@ public class CdsObjectFactory {
         RelatedClinicalStatement relatedClinicalStatement = new RelatedClinicalStatement();
         relatedClinicalStatement.setTargetRelationshipToSource(getCD(targetRelationshipToSourceCode, Config.getCodeSystemOid("ACT_RELATIONSHIP_TYPE")));
         return relatedClinicalStatement;
+    }
+
+    /**
+     * Check is a string is empty.
+     *
+     * @param p_input
+     * @return
+     */
+    public static boolean isEmpty(String p_input) {
+        return (p_input == null || p_input.trim().length() == 0);
     }
 
 }

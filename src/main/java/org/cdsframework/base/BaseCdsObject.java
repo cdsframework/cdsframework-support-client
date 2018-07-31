@@ -63,7 +63,8 @@ import org.opencds.vmr.v1_0.schema.SupplyEvent;
 import org.opencds.vmr.v1_0.schema.VMR;
 
 /**
- * Abstract base wrapper class for CdsInput and CdsOutput. See extending classes for examples.
+ * Abstract base wrapper class for CdsInput and CdsOutput. See extending classes
+ * for examples.
  *
  * @see org.opencds.vmr.v1_0.schema.cdsinput.CdsInput
  * @see org.opencds.vmr.v1_0.schema.cdsoutput.CdsOutput
@@ -121,9 +122,11 @@ public abstract class BaseCdsObject<T> {
     }
 
     /**
-     * Gets the generic class argument that was used in the class extending this class.
+     * Gets the generic class argument that was used in the class extending this
+     * class.
      *
-     * @return the generic class argument that was used in the class extending this class
+     * @return the generic class argument that was used in the class extending
+     * this class
      */
     public Class<T> getCdsObjectClass() {
         return cdsObjectClass;
@@ -305,7 +308,8 @@ public abstract class BaseCdsObject<T> {
      * @param administrationEventHighTime
      * @param idRoot
      * @param idExtension
-     * @param components a list of the vaccine components represented by SubstanceAdministrationEvent objects
+     * @param components a list of the vaccine components represented by
+     * SubstanceAdministrationEvent objects
      * @return
      */
     protected static SubstanceAdministrationEvent addSubstanceAdministrationEvent(
@@ -667,7 +671,8 @@ public abstract class BaseCdsObject<T> {
     /**
      * Sets the patient ID.
      *
-     * The value is from the Config.getCodeSystemOid("PATIENT_ID") configured code system OID.
+     * The value is from the Config.getCodeSystemOid("PATIENT_ID") configured
+     * code system OID.
      *
      * @param patientId the patient ID
      */
@@ -806,9 +811,11 @@ public abstract class BaseCdsObject<T> {
     }
 
     /**
-     * Add an ObservationResult to the output object representing an immunity event.
+     * Add an ObservationResult to the output object representing an immunity
+     * event.
      *
-     * This method is a generic implementation for simplifying the adding of a ObservationResult to the output object.
+     * This method is a generic implementation for simplifying the adding of a
+     * ObservationResult to the output object.
      *
      * @see ObservationResult
      * @param observationResult the observation result to add
@@ -820,9 +827,11 @@ public abstract class BaseCdsObject<T> {
     }
 
     /**
-     * Add an ObservationResult to the CDS object representing an immunity event.
+     * Add an ObservationResult to the CDS object representing an immunity
+     * event.
      *
-     * This method is a generic implementation for simplifying the adding of a ObservationResult to the CDS object.
+     * This method is a generic implementation for simplifying the adding of a
+     * ObservationResult to the CDS object.
      *
      * @see org.cdsframework.util.support.cds.Config
      * @param focusCode the focus code
@@ -833,7 +842,8 @@ public abstract class BaseCdsObject<T> {
      * @param valueDisplayName the observation value display name
      * @param valueCodeSystem the observation value code system
      * @param valueCodeSystemName the observation value code system name
-     * @param extension a unique ID identifying this particular observation result
+     * @param extension a unique ID identifying this particular observation
+     * result
      * @param root the OID identifying the source of the extension
      */
     public void addObservationResult(
@@ -863,9 +873,11 @@ public abstract class BaseCdsObject<T> {
     }
 
     /**
-     * Add an ObservationResult to the CDS object representing an immunity event.
+     * Add an ObservationResult to the CDS object representing an immunity
+     * event.
      *
-     * This method is a generic implementation for simplifying the adding of a ObservationResult to the CDS object.
+     * This method is a generic implementation for simplifying the adding of a
+     * ObservationResult to the CDS object.
      *
      * @return
      * @see org.cdsframework.util.support.cds.Config
@@ -876,7 +888,8 @@ public abstract class BaseCdsObject<T> {
      * @param lowTime the low date time of the observation result
      * @param highTime the high date time of the observation result
      * @param idRoot the OID identifying the source of the extension
-     * @param idExtension a unique ID identifying this particular observation result
+     * @param idExtension a unique ID identifying this particular observation
+     * result
      */
     public ObservationResult addObservationResult(
             String focusCode,
@@ -892,9 +905,11 @@ public abstract class BaseCdsObject<T> {
     }
 
     /**
-     * Add an ObservationResult to the CDS object representing an immunity event.
+     * Add an ObservationResult to the CDS object representing an immunity
+     * event.
      *
-     * This method is a generic implementation for simplifying the adding of a ObservationResult to the CDS object.
+     * This method is a generic implementation for simplifying the adding of a
+     * ObservationResult to the CDS object.
      *
      * @return
      * @see org.cdsframework.util.support.cds.Config
@@ -909,7 +924,8 @@ public abstract class BaseCdsObject<T> {
      * @param lowTime the low date time of the observation result
      * @param highTime the high date time of the observation result
      * @param idRoot the OID identifying the source of the extension
-     * @param idExtension a unique ID identifying this particular observation result
+     * @param idExtension a unique ID identifying this particular observation
+     * result
      */
     public ObservationResult addObservationResult(
             String focusCode,
@@ -938,10 +954,16 @@ public abstract class BaseCdsObject<T> {
 
         observationResult.setObservationFocus(CdsObjectFactory.getCD(focusCode, focusCodeSystem, focusDisplayName, focusCodeSystemName));
 
-        IVLTS ivlts = new IVLTS();
-        ivlts.setHigh(highTime);
-        ivlts.setLow(lowTime);
-        observationResult.setObservationEventTime(ivlts);
+        if (!CdsObjectFactory.isEmpty(lowTime) || !CdsObjectFactory.isEmpty(highTime)) {
+            IVLTS ivlts = new IVLTS();
+            if (!CdsObjectFactory.isEmpty(highTime)) {
+                ivlts.setHigh(highTime);
+            }
+            if (!CdsObjectFactory.isEmpty(lowTime)) {
+                ivlts.setLow(lowTime);
+            }
+            observationResult.setObservationEventTime(ivlts);
+        }
 
         addObservationResult(getCdsObjectVmr(), observationResult);
 
@@ -1144,7 +1166,8 @@ public abstract class BaseCdsObject<T> {
     /**
      * Add a SubstanceAdministrationEvent to the CDS object.
      *
-     * This method is a generic implementation for simplifying the adding of a SubstanceAdministrationEvent to the CDS object.
+     * This method is a generic implementation for simplifying the adding of a
+     * SubstanceAdministrationEvent to the CDS object.
      *
      * @see SubstanceAdministrationEvent
      * @see org.cdsframework.util.support.cds.Config
@@ -1152,12 +1175,16 @@ public abstract class BaseCdsObject<T> {
      * @param displayName the substance code display name
      * @param codeSystem the substance code code system
      * @param codeSystemName the substance code code system name
-     * @param administrationEventLowTime the low date time of the substance administration
-     * @param administrationEventHighTime the high date time of the substance administration
-     * @param idRoot a unique ID identifying this particular administration event
+     * @param administrationEventLowTime the low date time of the substance
+     * administration
+     * @param administrationEventHighTime the high date time of the substance
+     * administration
+     * @param idRoot a unique ID identifying this particular administration
+     * event
      * @param idExtension the OID identifying the source of the extension
      * @param components
-     * @return a properly constructed SubstanceAdministrationEvent with an ObservationResult on it
+     * @return a properly constructed SubstanceAdministrationEvent with an
+     * ObservationResult on it
      */
     public SubstanceAdministrationEvent addSubstanceAdministrationEvent(
             String code,
@@ -1181,15 +1208,20 @@ public abstract class BaseCdsObject<T> {
     /**
      * Add a SubstanceAdministrationEvent to the CDS object.
      *
-     * This method is a generic implementation for simplifying the adding of a SubstanceAdministrationEvent to the CDS object.
+     * This method is a generic implementation for simplifying the adding of a
+     * SubstanceAdministrationEvent to the CDS object.
      *
      * @see SubstanceAdministrationEvent
      * @see org.cdsframework.util.support.cds.Config
-     * @param administrationEventLowTime the low date time of the substance administration
-     * @param administrationEventHighTime the high date time of the substance administration
+     * @param administrationEventLowTime the low date time of the substance
+     * administration
+     * @param administrationEventHighTime the high date time of the substance
+     * administration
      * @param idRoot the OID identifying the source of the idExtension
-     * @param idExtension a unique ID identifying this particular administration event
-     * @return a properly constructed SubstanceAdministrationEvent with an ObservationResult on it
+     * @param idExtension a unique ID identifying this particular administration
+     * event
+     * @return a properly constructed SubstanceAdministrationEvent with an
+     * ObservationResult on it
      */
     public SubstanceAdministrationEvent addSubstanceAdministrationEvent(
             String administrationEventLowTime,
@@ -1212,18 +1244,24 @@ public abstract class BaseCdsObject<T> {
     /**
      * Add a SubstanceAdministrationProposal to the CDS object.
      *
-     * This method is an ICE specific implementation for simplifying the adding of a SubstanceAdministrationProposal to the CDS
-     * object.
+     * This method is an ICE specific implementation for simplifying the adding
+     * of a SubstanceAdministrationProposal to the CDS object.
      *
-     * The vaccineGroup is from the Config.getCodeSystemOid("VACCINE_GROUP") configured code system OID.
+     * The vaccineGroup is from the Config.getCodeSystemOid("VACCINE_GROUP")
+     * configured code system OID.
      *
-     * The substanceCode is from the Config.getCodeSystemOid("VACCINE") configured code system OID.
+     * The substanceCode is from the Config.getCodeSystemOid("VACCINE")
+     * configured code system OID.
      *
-     * The value code is from the Config.getCodeSystemOid("RECOMMENDATION_VALUE") configured code system OID.
+     * The value code is from the
+     * Config.getCodeSystemOid("RECOMMENDATION_VALUE") configured code system
+     * OID.
      *
-     * The focus code is from the Config.getCodeSystemOid("VACCINE_GROUP") configured code system OID.
+     * The focus code is from the Config.getCodeSystemOid("VACCINE_GROUP")
+     * configured code system OID.
      *
-     * The interpretation codes (reasons) are from the Config.getCodeSystemOid("RECOMMENDATION_INTERPRETATION") configured code
+     * The interpretation codes (reasons) are from the
+     * Config.getCodeSystemOid("RECOMMENDATION_INTERPRETATION") configured code
      * system OID.
      *
      * @see SubstanceAdministrationProposal
@@ -1232,7 +1270,8 @@ public abstract class BaseCdsObject<T> {
      * @param vaccineGroupOid the vaccine group oid
      * @param substanceCode the substance code
      * @param substanceOid the substance oid
-     * @param administrationTimeInterval the date time of the substance administration
+     * @param administrationTimeInterval the date time of the substance
+     * administration
      * @param focusCode the focus of the administration event
      * @param focusOid the focus oid of the administration event
      * @param valueCode the recommendation value
@@ -1268,18 +1307,24 @@ public abstract class BaseCdsObject<T> {
     /**
      * Add a SubstanceAdministrationProposal to the CDS object.
      *
-     * This method is an ICE specific implementation for simplifying the adding of a SubstanceAdministrationProposal to the CDS
-     * object.
+     * This method is an ICE specific implementation for simplifying the adding
+     * of a SubstanceAdministrationProposal to the CDS object.
      *
-     * The vaccineGroup is from the Config.getCodeSystemOid("VACCINE_GROUP") configured code system OID.
+     * The vaccineGroup is from the Config.getCodeSystemOid("VACCINE_GROUP")
+     * configured code system OID.
      *
-     * The substanceCode is from the Config.getCodeSystemOid("VACCINE") configured code system OID.
+     * The substanceCode is from the Config.getCodeSystemOid("VACCINE")
+     * configured code system OID.
      *
-     * The value code is from the Config.getCodeSystemOid("RECOMMENDATION_VALUE") configured code system OID.
+     * The value code is from the
+     * Config.getCodeSystemOid("RECOMMENDATION_VALUE") configured code system
+     * OID.
      *
-     * The focus code is from the Config.getCodeSystemOid("VACCINE_GROUP") configured code system OID.
+     * The focus code is from the Config.getCodeSystemOid("VACCINE_GROUP")
+     * configured code system OID.
      *
-     * The interpretation codes (reasons) are from the Config.getCodeSystemOid("RECOMMENDATION_INTERPRETATION") configured code
+     * The interpretation codes (reasons) are from the
+     * Config.getCodeSystemOid("RECOMMENDATION_INTERPRETATION") configured code
      * system OID.
      *
      * @see SubstanceAdministrationProposal
@@ -1333,7 +1378,8 @@ public abstract class BaseCdsObject<T> {
     /**
      * Add a SupplyEvent to the CDS object.
      *
-     * This method is a generic implementation for simplifying the adding of a SupplyEvent to the CDS object.
+     * This method is a generic implementation for simplifying the adding of a
+     * SupplyEvent to the CDS object.
      *
      * @see SupplyEvent
      * @see org.cdsframework.util.support.cds.Config
