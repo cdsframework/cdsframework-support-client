@@ -136,9 +136,12 @@ public class CdsObjectFactory {
      * @return
      */
     public static ObservationValue getObservationValue(String code, String codeSystem, String codeSystemName, String displayName) {
-        CD cd = getCD(code, codeSystem, displayName, codeSystemName);
-        ObservationResult.ObservationValue observationValue = new ObservationResult.ObservationValue();
-        observationValue.setConcept(cd);
+        ObservationResult.ObservationValue observationValue = null;
+        if (!isEmpty(code)) {
+            CD cd = getCD(code, codeSystem, displayName, codeSystemName);
+            observationValue = new ObservationResult.ObservationValue();
+            observationValue.setConcept(cd);
+        }
         return observationValue;
     }
 
@@ -441,7 +444,9 @@ public class CdsObjectFactory {
             String highTime) {
         SupplyEvent supplyEvent = getSupplyEvent();
 
-        supplyEvent.setSupplyCode(getCD(code, codeSystem, displayName, codeSystemName));
+        if (!isEmpty(code)) {
+            supplyEvent.setSupplyCode(getCD(code, codeSystem, displayName, codeSystemName));
+        }
 
         if (!CdsObjectFactory.isEmpty(lowTime) || !CdsObjectFactory.isEmpty(highTime)) {
             IVLTS ivlts = new IVLTS();
@@ -464,7 +469,9 @@ public class CdsObjectFactory {
             String eventDate) {
         ProcedureEvent procedureEvent = getProcedureEvent();
 
-        procedureEvent.setProcedureCode(getCD(code, codeSystem, displayName, codeSystemName));
+        if (!isEmpty(code)) {
+            procedureEvent.setProcedureCode(getCD(code, codeSystem, displayName, codeSystemName));
+        }
 
         if (!CdsObjectFactory.isEmpty(eventDate)) {
             IVLTS ivlts = new IVLTS();
@@ -498,7 +505,9 @@ public class CdsObjectFactory {
             procedureEvent.getId().setExtension(idExtension);
         }
 
-        procedureEvent.setProcedureCode(getCD(procedureEventCode, procedureEventCodeSystem, procedureEventCodeDisplayName, procedureEventCodeSystemName));
+        if (!isEmpty(procedureEventCode)) {
+            procedureEvent.setProcedureCode(getCD(procedureEventCode, procedureEventCodeSystem, procedureEventCodeDisplayName, procedureEventCodeSystemName));
+        }
 
         ObservationResult observationResult = getObservationResult();
         ObservationResult.ObservationValue observationValue = getObservationValue(
@@ -538,8 +547,12 @@ public class CdsObjectFactory {
 
         Goal goal = getGoal();
 
-        goal.setGoalFocus(getCD(goalFocusCode, goalFocusCodeSystem, goalFocusDisplayName, goalFocusCodeSystemName));
-        goal.setGoalStatus(getCD(goalStatusCode, goalStatusCodeCodeSystem, goalStatusCodeDisplayName, goalStatusCodeCodeSystemName));
+        if (!isEmpty(goalFocusCode)) {
+            goal.setGoalFocus(getCD(goalFocusCode, goalFocusCodeSystem, goalFocusDisplayName, goalFocusCodeSystemName));
+        }
+        if (!isEmpty(goalStatusCode)) {
+            goal.setGoalStatus(getCD(goalStatusCode, goalStatusCodeCodeSystem, goalStatusCodeDisplayName, goalStatusCodeCodeSystemName));
+        }
 
         if (!CdsObjectFactory.isEmpty(lowTime) || !CdsObjectFactory.isEmpty(highTime)) {
             IVLTS ivlts = new IVLTS();
@@ -567,8 +580,12 @@ public class CdsObjectFactory {
             String highTime) throws CdsException {
         AdverseEvent adverseEvent = getAdverseEvent();
 
-        adverseEvent.setAdverseEventCode(getCD(adverseEventCode, adverseEventCodeCodeSystem, adverseEventCodeDisplayName, adverseEventCodeCodeSystemName));
-        adverseEvent.setAdverseEventStatus(getCD(adverseEventStatus, adverseEventStatusCodeSystem, adverseEventStatusDisplayName, adverseEventStatusCodeSystemName));
+        if (!isEmpty(adverseEventCode)) {
+            adverseEvent.setAdverseEventCode(getCD(adverseEventCode, adverseEventCodeCodeSystem, adverseEventCodeDisplayName, adverseEventCodeCodeSystemName));
+        }
+        if (!isEmpty(adverseEventStatus)) {
+            adverseEvent.setAdverseEventStatus(getCD(adverseEventStatus, adverseEventStatusCodeSystem, adverseEventStatusDisplayName, adverseEventStatusCodeSystemName));
+        }
 
         if (!CdsObjectFactory.isEmpty(lowTime) || !CdsObjectFactory.isEmpty(highTime)) {
             IVLTS ivlts = new IVLTS();
@@ -597,8 +614,12 @@ public class CdsObjectFactory {
 
         Problem problem = getProblem();
 
-        problem.setProblemCode(getCD(problemCode, problemCodeSystem, problemCodeDisplayName, problemCodeSystemName));
-        problem.setProblemStatus(getCD(statusCode, statusCodeSystem, statusCodeDisplayName, statusCodeSystemName));
+        if (!isEmpty(problemCode)) {
+            problem.setProblemCode(getCD(problemCode, problemCodeSystem, problemCodeDisplayName, problemCodeSystemName));
+        }
+        if (!isEmpty(statusCode)) {
+            problem.setProblemStatus(getCD(statusCode, statusCodeSystem, statusCodeDisplayName, statusCodeSystemName));
+        }
 
         if (!CdsObjectFactory.isEmpty(lowTime) || !CdsObjectFactory.isEmpty(highTime)) {
             IVLTS ivlts = new IVLTS();
@@ -633,7 +654,9 @@ public class CdsObjectFactory {
                 observationValueCodeSystemName,
                 observationValueDisplayName);
         observationResult.setObservationValue(observationValue);
-        observationResult.setObservationFocus(getCD(focusCode, focusCodeSystem, focusDisplayName, focusCodeSystemName));
+        if (!isEmpty(focusCode)) {
+            observationResult.setObservationFocus(getCD(focusCode, focusCodeSystem, focusDisplayName, focusCodeSystemName));
+        }
 
         RelatedClinicalStatement relatedClinicalStatement = getRelatedClinicalStatement("PERT");
         relatedClinicalStatement.setObservationResult(observationResult);
@@ -660,7 +683,9 @@ public class CdsObjectFactory {
             String highTime) throws CdsException {
 
         EncounterEvent encounterEvent = getEncounterEvent();
-        encounterEvent.setEncounterType(getCD(encounterEventCode, encounterEventCodeCodeSystem, encounterEventCodeDisplayName, encounterEventCodeCodeSystemName));
+        if (!isEmpty(encounterEventCode)) {
+            encounterEvent.setEncounterType(getCD(encounterEventCode, encounterEventCodeCodeSystem, encounterEventCodeDisplayName, encounterEventCodeCodeSystemName));
+        }
 
         if (!CdsObjectFactory.isEmpty(lowTime) || !CdsObjectFactory.isEmpty(highTime)) {
             IVLTS ivlts = new IVLTS();
@@ -704,10 +729,12 @@ public class CdsObjectFactory {
 
         AdministrableSubstance substance = getAdministrableSubstance();
 
-        if (substanceCode != null && !substanceCode.trim().isEmpty()) {
+        if (!isEmpty(substanceCode)) {
             substance.setSubstanceCode(getCD(substanceCode, substanceOid));
         } else {
-            substance.setSubstanceCode(getCD(vaccineGroup, vaccineGroupOid));
+            if (!isEmpty(vaccineGroup)) {
+                substance.setSubstanceCode(getCD(vaccineGroup, vaccineGroupOid));
+            }
         }
 
         substanceAdministrationProposal.setSubstance(substance);
@@ -758,10 +785,12 @@ public class CdsObjectFactory {
 
         AdministrableSubstance substance = getAdministrableSubstance();
 
-        if (substanceCode != null && !substanceCode.trim().isEmpty()) {
+        if (!isEmpty(substanceCode)) {
             substance.setSubstanceCode(getCD(substanceCode, substanceOid));
         } else {
-            substance.setSubstanceCode(getCD(vaccineGroup, vaccineGroupOid));
+            if (!isEmpty(vaccineGroup)) {
+                substance.setSubstanceCode(getCD(vaccineGroup, vaccineGroupOid));
+            }
         }
 
         substanceAdministrationProposal.setSubstance(substance);
