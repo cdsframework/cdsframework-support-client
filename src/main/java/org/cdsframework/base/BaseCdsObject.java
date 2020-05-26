@@ -48,6 +48,7 @@ import org.opencds.vmr.v1_0.schema.EvaluatedPerson.ClinicalStatements.Observatio
 import org.opencds.vmr.v1_0.schema.EvaluatedPerson.ClinicalStatements.Problems;
 import org.opencds.vmr.v1_0.schema.EvaluatedPerson.ClinicalStatements.ProcedureEvents;
 import org.opencds.vmr.v1_0.schema.EvaluatedPerson.ClinicalStatements.SubstanceAdministrationEvents;
+import org.opencds.vmr.v1_0.schema.EvaluatedPerson.ClinicalStatements.SubstanceAdministrationOrders;
 import org.opencds.vmr.v1_0.schema.EvaluatedPerson.ClinicalStatements.SubstanceAdministrationProposals;
 import org.opencds.vmr.v1_0.schema.EvaluatedPerson.ClinicalStatements.SupplyEvents;
 import org.opencds.vmr.v1_0.schema.EvaluatedPerson.Demographics;
@@ -58,6 +59,7 @@ import org.opencds.vmr.v1_0.schema.Problem;
 import org.opencds.vmr.v1_0.schema.ProcedureEvent;
 import org.opencds.vmr.v1_0.schema.RelatedClinicalStatement;
 import org.opencds.vmr.v1_0.schema.SubstanceAdministrationEvent;
+import org.opencds.vmr.v1_0.schema.SubstanceAdministrationOrder;
 import org.opencds.vmr.v1_0.schema.SubstanceAdministrationProposal;
 import org.opencds.vmr.v1_0.schema.SupplyEvent;
 import org.opencds.vmr.v1_0.schema.VMR;
@@ -194,6 +196,16 @@ public abstract class BaseCdsObject<T> {
             clinicalStatements.setSubstanceAdministrationEvents(substanceAdministrationEvents);
         }
         return substanceAdministrationEvents;
+    }
+
+    private static SubstanceAdministrationOrders getSubstanceAdministrationOrders(VMR vmr) {
+        ClinicalStatements clinicalStatements = vmr.getPatient().getClinicalStatements();
+        SubstanceAdministrationOrders substanceAdministrationOrders = clinicalStatements.getSubstanceAdministrationOrders();
+        if (substanceAdministrationOrders == null) {
+            substanceAdministrationOrders = new SubstanceAdministrationOrders();
+            clinicalStatements.setSubstanceAdministrationOrders(substanceAdministrationOrders);
+        }
+        return substanceAdministrationOrders;
     }
 
     private static SupplyEvents getSupplyEvents(VMR vmr) {
@@ -1428,6 +1440,22 @@ public abstract class BaseCdsObject<T> {
         }
         return substanceAdministrationEvents.getSubstanceAdministrationEvent();
     }
+
+    /**
+     * Gets the list of SubstanceAdministrationOrders on the CDS object.
+     *
+     * @see SubstanceAdministrationOrder
+     * @return the list of SubstanceAdministrationOrders
+     */
+    public List<SubstanceAdministrationOrder> getSubstanceAdministrationOrders() {
+        SubstanceAdministrationOrders substanceAdministrationOrders = getCdsObjectVmr().getPatient().getClinicalStatements().getSubstanceAdministrationOrders();
+        if (substanceAdministrationOrders == null) {
+            substanceAdministrationOrders = new SubstanceAdministrationOrders();
+            getCdsObjectVmr().getPatient().getClinicalStatements().setSubstanceAdministrationOrders(substanceAdministrationOrders);
+        }
+        return substanceAdministrationOrders.getSubstanceAdministrationOrder();
+    }
+
 
     public String getPatientGender() {
         String result = null;
