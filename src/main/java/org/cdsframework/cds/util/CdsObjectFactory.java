@@ -53,6 +53,7 @@ import org.opencds.vmr.v1_0.schema.Problem;
 import org.opencds.vmr.v1_0.schema.ProcedureEvent;
 import org.opencds.vmr.v1_0.schema.RelatedClinicalStatement;
 import org.opencds.vmr.v1_0.schema.SubstanceAdministrationEvent;
+import org.opencds.vmr.v1_0.schema.SubstanceAdministrationOrder;
 import org.opencds.vmr.v1_0.schema.SubstanceAdministrationProposal;
 import org.opencds.vmr.v1_0.schema.SupplyEvent;
 import org.opencds.vmr.v1_0.schema.TS;
@@ -422,6 +423,45 @@ public class CdsObjectFactory {
             substanceAdministrationEvent.setAdministrationTimeInterval(ivlts);
         }
         return substanceAdministrationEvent;
+    }
+
+    /**
+     * Generates a properly constructed SubstanceAdministrationOrder instance.
+     *
+     * @param code
+     * @param displayName
+     * @param codeSystem
+     * @param codeSystemName
+     * @param lowTime
+     * @param highTime
+     * @return
+     */
+    public static SubstanceAdministrationOrder getSubstanceAdministrationOrder(
+            String code,
+            String displayName,
+            String codeSystem,
+            String codeSystemName,
+            String lowTime,
+            String highTime) {
+        SubstanceAdministrationOrder substanceAdministrationOrder = getSubstanceAdministrationOrder();
+
+        if (code != null && codeSystem != null) {
+            AdministrableSubstance substance = getAdministrableSubstance();
+            substance.setSubstanceCode(getCD(code, codeSystem, displayName, codeSystemName));
+            substanceAdministrationOrder.setSubstance(substance);
+        }
+
+        if (!CdsObjectFactory.isEmpty(lowTime) || !CdsObjectFactory.isEmpty(highTime)) {
+            IVLTS ivlts = new IVLTS();
+            if (!CdsObjectFactory.isEmpty(highTime)) {
+                ivlts.setHigh(highTime);
+            }
+            if (!CdsObjectFactory.isEmpty(lowTime)) {
+                ivlts.setLow(lowTime);
+            }
+            substanceAdministrationOrder.setAdministrationTimeInterval(ivlts);
+        }
+        return substanceAdministrationOrder;
     }
 
     /**
@@ -920,6 +960,24 @@ public class CdsObjectFactory {
         substanceAdministrationEvent.setId(getII());
         substanceAdministrationEvent.setSubstanceAdministrationGeneralPurpose(getGeneralPurposeCode());
         return substanceAdministrationEvent;
+    }
+
+    /**
+     * Generate a properly constructed SubstanceAdministrationOrder object.
+     *
+     * Defaults the template id to the value of
+     * Config.getCodeSystemOid("SUBSTANCE_ADMINISTRATION_ORDER_ROOT")
+     *
+     * @see SubstanceAdministrationOrder
+     * @return an instance of SubstanceAdministrationOrder
+     */
+    public static SubstanceAdministrationOrder getSubstanceAdministrationOrder() {
+        SubstanceAdministrationOrder substanceAdministrationOrder = new SubstanceAdministrationOrder();
+        // TODO: Figure out what is going on with this root ID
+        substanceAdministrationOrder.getTemplateId().add(getII(Config.getCodeSystemOid("SUBSTANCE_ADMINISTRATION_ORDER_ROOT")));
+        substanceAdministrationOrder.setId(getII());
+        substanceAdministrationOrder.setSubstanceAdministrationGeneralPurpose(getGeneralPurposeCode());
+        return substanceAdministrationOrder;
     }
 
     /**
