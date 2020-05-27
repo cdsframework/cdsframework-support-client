@@ -358,6 +358,57 @@ public abstract class BaseCdsObject<T> {
     }
 
     /**
+     * Internal method to add a SubstanceAdministrationOrder.
+     *
+     * @see Vmr
+     * @see SubstanceAdministrationOrder
+     * @param vmr
+     * @param code
+     * @param displayName
+     * @param codeSystem
+     * @param codeSystemName
+     * @param administrationOrderLowTime
+     * @param administrationOrderHighTime
+     * @param idRoot
+     * @param idExtension
+     * @param components a list of the vaccine components represented by
+     * SubstanceAdministrationOrder objects
+     * @return
+     */
+    protected static SubstanceAdministrationOrder addSubstanceAdministrationOrder(
+            VMR vmr,
+            String code,
+            String displayName,
+            String codeSystem,
+            String codeSystemName,
+            String administrationOrderLowTime,
+            String administrationOrderHighTime,
+            String idRoot,
+            String idExtension,
+            List<SubstanceAdministrationOrder> components) {
+
+        SubstanceAdministrationOrder substanceAdministrationOrder
+                = CdsObjectFactory.getSubstanceAdministrationOrder(code, displayName, codeSystem, codeSystemName, administrationOrderLowTime, administrationOrderHighTime);
+        substanceAdministrationOrder.getId().setRoot(idRoot);
+        if (idExtension != null && !idExtension.trim().isEmpty()) {
+            substanceAdministrationOrder.getId().setExtension(idExtension);
+        }
+
+        List<RelatedClinicalStatement> relatedClinicalStatements = substanceAdministrationOrder.getRelatedClinicalStatement();
+        if (components != null) {
+            for (SubstanceAdministrationOrder sao : components) {
+                RelatedClinicalStatement relatedClinicalStatement = CdsObjectFactory.getRelatedClinicalStatement("PERT");
+                relatedClinicalStatement.setSubstanceAdministrationOrder(sao);
+                relatedClinicalStatements.add(relatedClinicalStatement);
+            }
+        }
+
+        SubstanceAdministrationOrders substanceAdministrationOrders = getSubstanceAdministrationOrders(vmr);
+        substanceAdministrationOrders.getSubstanceAdministrationOrder().add(substanceAdministrationOrder);
+        return substanceAdministrationOrder;
+    }
+
+    /**
      * Internal method to add a SupplyEvent.
      *
      * @see Vmr
@@ -1218,6 +1269,48 @@ public abstract class BaseCdsObject<T> {
     }
 
     /**
+     * Add a SubstanceAdministrationOrder to the CDS object.
+     *
+     * This method is a generic implementation for simplifying the adding of a
+     * SubstanceAdministrationOrder to the CDS object.
+     *
+     * @see SubstanceAdministrationOrder
+     * @see org.cdsframework.util.support.cds.Config
+     * @param code the substance code
+     * @param displayName the substance code display name
+     * @param codeSystem the substance code code system
+     * @param codeSystemName the substance code code system name
+     * @param administrationOrderLowTime the low date time of the substance
+     * administration
+     * @param administrationOrderHighTime the high date time of the substance
+     * administration
+     * @param idRoot a unique ID identifying this particular administration
+     * event
+     * @param idExtension the OID identifying the source of the extension
+     * @param components
+     * @return a properly constructed SubstanceAdministrationOrder with an
+     * ObservationResult on it
+     */
+    public SubstanceAdministrationOrder addSubstanceAdministrationOrder(
+            String code,
+            String displayName,
+            String codeSystem,
+            String codeSystemName,
+            String administrationOrderLowTime,
+            String administrationOrderHighTime,
+            String idRoot,
+            String idExtension,
+            List<SubstanceAdministrationOrder> components) {
+        return addSubstanceAdministrationOrder(
+                getCdsObjectVmr(),
+                code, displayName,
+                codeSystem, codeSystemName,
+                administrationOrderLowTime, administrationOrderHighTime,
+                idRoot, idExtension,
+                components);
+    }
+
+    /**
      * Add a SubstanceAdministrationEvent to the CDS object.
      *
      * This method is a generic implementation for simplifying the adding of a
@@ -1248,6 +1341,42 @@ public abstract class BaseCdsObject<T> {
                 null,
                 administrationEventLowTime,
                 administrationEventHighTime,
+                idRoot,
+                idExtension,
+                null);
+    }
+
+    /**
+     * Add a SubstanceAdministrationOrder to the CDS object.
+     *
+     * This method is a generic implementation for simplifying the adding of a
+     * SubstanceAdministrationOrder to the CDS object.
+     *
+     * @see SubstanceAdministrationOrder
+     * @see org.cdsframework.util.support.cds.Config
+     * @param administrationOrderLowTime the low date time of the substance
+     * administration
+     * @param administrationOrderHighTime the high date time of the substance
+     * administration
+     * @param idRoot the OID identifying the source of the idExtension
+     * @param idExtension a unique ID identifying this particular administration
+     * event
+     * @return a properly constructed SubstanceAdministrationOrder with an
+     * ObservationResult on it
+     */
+    public SubstanceAdministrationOrder addSubstanceAdministrationOrder(
+            String administrationOrderLowTime,
+            String administrationOrderHighTime,
+            String idRoot,
+            String idExtension) {
+        return addSubstanceAdministrationOrder(
+                getCdsObjectVmr(),
+                null,
+                null,
+                null,
+                null,
+                administrationOrderLowTime,
+                administrationOrderHighTime,
                 idRoot,
                 idExtension,
                 null);
